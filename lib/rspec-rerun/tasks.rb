@@ -38,6 +38,9 @@ module RSpec
 
           # Parse environment variables
           options[:pattern] ||= ENV['RSPEC_RERUN_PATTERN'] if ENV['RSPEC_RERUN_PATTERN']
+          if ENV['RSPEC_RERUN_EXCLUDE_PATTERN']
+            options[:exclude_pattern] ||= ENV['RSPEC_RERUN_EXCLUDE_PATTERN']
+          end
           options[:tag] ||= ENV['RSPEC_RERUN_TAG'] if ENV['RSPEC_RERUN_TAG']
           options[:retry_count] ||= ENV['RSPEC_RERUN_RETRY_COUNT'] if ENV['RSPEC_RERUN_RETRY_COUNT']
           options[:verbose] = (ENV['RSPEC_RERUN_VERBOSE'] != 'false') if options[:verbose].nil?
@@ -86,6 +89,7 @@ end
 desc 'Run RSpec examples.'
 RSpec::Core::RakeTask.new('rspec-rerun:run') do |t, args|
   t.pattern = args[:pattern] if args[:pattern]
+  t.exclude_pattern = args[:exclude_pattern] if args[:exclude_pattern]
   t.fail_on_error = false
   t.verbose = false if args[:verbose] == false
   t.rspec_opts = RSpec::Rerun::Tasks.rspec_options(args)
