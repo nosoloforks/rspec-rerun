@@ -12,10 +12,12 @@ module RSpec
             '--format', 'RSpec::Rerun::Formatter',
             *dot_rspec_options
           ].compact.flatten
-          if args[:tag]
+
+          args[:tag]&.split(',')&.each do |tag|
             options << '--tag'
-            options << args[:tag]
+            options << tag
           end
+
           options
         end
 
